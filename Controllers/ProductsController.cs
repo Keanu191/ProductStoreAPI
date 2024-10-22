@@ -43,13 +43,5 @@ namespace WebApplicationDemoS4.Controllers
             await _shopContext.SaveChangesAsync();
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
-        /*
-        [HttpGet]
-
-        public IActionResult GetProducts()
-        {
-            return Ok();
-        }
-        */
     }
 }

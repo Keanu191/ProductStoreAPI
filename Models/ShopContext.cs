@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HPlusSport.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplicationDemoS4.Models
 {
