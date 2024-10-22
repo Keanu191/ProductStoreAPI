@@ -1,5 +1,6 @@
 ﻿using HPlusSport.API.Models;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace WebApplicationDemoS4.Models
 {
