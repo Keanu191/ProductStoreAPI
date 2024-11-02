@@ -2,7 +2,7 @@
 using WebApplicationDemoS4.Models;
 using MongoDB.Driver;
 
-namespace HPlusSport.API.Models
+namespace WebApplicationDemoS4.API.Models
 {
     public static class ModelBuilderExtension
     {

@@ -10,6 +10,7 @@ using MongoDB.Driver;
 using WebApplicationDemoS4.Models;
 
 using Microsoft.EntityFrameworkCore;
+using WebApplicationDemoS4.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<Category>(
     builder.Configuration.GetSection("MongoDBSettings"));
 
+// register the MongoDBService with the DI Container
+builder.Services.AddSingleton<MongoDBService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -30,6 +33,7 @@ builder.Services.AddDbContext<ShopContext>(options =>
 options.UseInMemoryDatabase("Shop");
     
 });
+
 
 var app = builder.Build();
 
