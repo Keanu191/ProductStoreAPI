@@ -1,6 +1,4 @@
-﻿using WebApplicationDemoS4.API.Models;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace WebApplicationDemoS4.Models
 {

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationDemoS4.Models;
-using MongoDB.Driver;
 
 namespace WebApplicationDemoS4.Controllers
 {
@@ -44,9 +43,13 @@ namespace WebApplicationDemoS4.Controllers
             await _shopContext.SaveChangesAsync();
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
+        /*
+        [HttpGet]
 
-        // Add a CRUD operations service
-
-        
+        public IActionResult GetProducts()
+        {
+            return Ok();
+        }
+        */
     }
 }
