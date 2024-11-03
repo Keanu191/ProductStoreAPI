@@ -8,7 +8,7 @@ namespace WebApplicationDemoS4.Models
         public int Id { get; set; }
         [Required]
 
-        public string? UnitName { get; set; } = string.Empty;
+        public int CategoryId { get; set; }
 
         [Required]
 
@@ -16,15 +16,15 @@ namespace WebApplicationDemoS4.Models
 
         [Required]
 
-        public string Description { get; set; } = string.Empty;
+        public string StoreLocation { get; set; } = string.Empty;
+
+        public int PostCode { get; set; }
+        [Required]
 
         public decimal Price { get; set; }
         [Required]
 
         public bool IsAvailable { get; set; }
-
-        [Required]
-        public int CategoryId { get; set; }
 
         [JsonIgnore]
 

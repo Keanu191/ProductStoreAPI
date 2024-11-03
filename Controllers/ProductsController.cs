@@ -17,6 +17,7 @@ namespace WebApplicationDemoS4.Controllers
             _shopContext.Database.EnsureCreated();
         }
 
+        // Get
         [HttpGet]
         public async Task<ActionResult> GetAllProducts()
         {
@@ -35,6 +36,8 @@ namespace WebApplicationDemoS4.Controllers
             }
             return Ok(product);
         }
+
+        // Post
         [HttpPost]
 
         public async Task<ActionResult<Product>> PostProduct(Product product)
@@ -43,13 +46,48 @@ namespace WebApplicationDemoS4.Controllers
             await _shopContext.SaveChangesAsync();
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
         }
-        /*
-        [HttpGet]
 
-        public IActionResult GetProducts()
+        // Put
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutProduct(int id, [FromBody] Product product)
         {
-            return Ok();
+            // here we are updating our data store
+            _shopContext.Entry(product).State = EntityState.Modified;
+
+            try
+            {
+                await _shopContext.SaveChangesAsync();
+            }
+            // maybe the product has been modified already
+            catch (DbUpdateConcurrencyException ex)
+            {
+                if (!_shopContext.Products.Any(p => p.Id == id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            await _shopContext.SaveChangesAsync();
+
+            return NoContent();
         }
-        */
+        // delete
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Product>> DeleteProduct(int id)
+        {
+            var product = await _shopContext.Products.FindAsync(id);
+            if (product == null)
+            {
+                // this will be the error 404 response
+                return NotFound();
+            }
+            _shopContext.Products.Remove(product);
+            await _shopContext.SaveChangesAsync();
+
+            return product;
+        }
     }
 }
