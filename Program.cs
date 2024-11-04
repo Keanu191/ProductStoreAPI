@@ -1,9 +1,16 @@
-
+using MongoDB.Driver;
 using WebApplicationDemoS4.Models;
-
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+    // Read the MongoDB connection string
+    var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDb");
+    builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoDbConnectionString));
+
 
 // Add services to the container.
 

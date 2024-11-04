@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using WebApplicationDemoS4.Models;
 
 namespace WebApplicationDemoS4.Controllers
@@ -10,11 +11,16 @@ namespace WebApplicationDemoS4.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ShopContext _shopContext;
+        private readonly IMongoCollection<Category> _categories;
 
-        public CategoryController(ShopContext shopContext)
+        public CategoryController(ShopContext shopContext, IMongoClient mongoClient)
         {
             _shopContext = shopContext;
             _shopContext.Database.EnsureCreated();
+
+            // for mongo
+            var database = mongoClient.GetDatabase("MongoDb"); // this calls the connection string to my datbabase in the appsettings json file
+            _categories = database.GetCollection<Category>("Category"); // one of the collection name in my db
         }
 
         // Get
