@@ -19,10 +19,17 @@ namespace WebApplicationDemoS4.Controllers
 
         // Get
         [HttpGet]
-        public async Task<ActionResult> GetAllProducts()
+        public async Task<ActionResult> GetAllProducts([FromQuery] QueryParameters queryParameters)
         {
-            var products = await _shopContext.Products.ToListAsync();
-            return Ok(products);
+            // return "OK";
+            // when we finished Product Controller then:
+            IQueryable<Product> product = _shopContext.Products;
+
+            product = product.Skip(queryParameters.Size * (queryParameters.Page -1))
+                .Take(queryParameters.Size);
+
+            //var products = await _shopContext.Products.ToListAsync();
+            return Ok(await product.ToArrayAsync());
         }
 
         [HttpGet, Route("get")]

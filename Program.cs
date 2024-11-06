@@ -8,9 +8,9 @@ using WebApplicationDemoS4;
 var builder = WebApplication.CreateBuilder(args);
 
 
-    // Read the MongoDB connection string
-    var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDb");
-    builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoDbConnectionString));
+// Read the MongoDB connection string
+var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDb");
+builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoDbConnectionString));
 
 
 // Add services to the container.
@@ -25,11 +25,12 @@ builder.Services.AddSingleton<MongoContext>();
 builder.Services.AddScoped<SeedService>();
 
 
-builder.Services.AddDbContext<ShopContext>(options =>
-{
-options.UseInMemoryDatabase("Shop");
-    
-});
+// Call MongoDB with both collections
+builder.Services.Configure<Category>(
+    builder.Configuration.GetSection("MongoDBDatabase"));
+
+builder.Services.Configure<Product>(
+    builder.Configuration.GetSection("MongoDBDatabase"));
 
 var app = builder.Build();
 
