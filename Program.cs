@@ -1,36 +1,37 @@
 using MongoDB.Driver;
-using WebApplicationDemoS4.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApplicationDemoS4;
+using WebApplicationDemoS4.Entities;
+using WebApplicationDemoS4.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Read the MongoDB connection string
-var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDb");
-builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoDbConnectionString));
+// Read the MongoDB connection string from appsettings.json
+//var mongoDbConnectionString = builder.Configuration.GetConnectionString("MongoDb");
+
+// register MongoClient as a singleton
+//builder.Services.AddSingleton<IMongoClient>(new MongoClient(mongoDbConnectionString));
+
+// Get Product collection through database
+//builder.Services.Configure<Product>(builder.Configuration.GetSection("MongoDBSettings"));
+
+// Get Category collection through database
+//builder.Services.Configure<Category>(builder.Configuration.GetSection("MongoDBSettings"));
 
 
-// Add services to the container.
+// Register SeedService to seed initial data
+//builder.Services.AddScoped<SeedService>();
 
+// Add services to the container
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Register MongoContext.cs/SeedService.cs
+// Register MongoContext for interacting with the db
 builder.Services.AddSingleton<MongoContext>();
-builder.Services.AddScoped<SeedService>();
-
-
-// Call MongoDB with both collections
-builder.Services.Configure<Category>(
-    builder.Configuration.GetSection("MongoDBDatabase"));
-
-builder.Services.Configure<Product>(
-    builder.Configuration.GetSection("MongoDBDatabase"));
 
 var app = builder.Build();
 
@@ -44,8 +45,8 @@ if (app.Environment.IsDevelopment())
 // Seed data when the app starts
 using (var scope = app.Services.CreateScope())
 {
-    var seedService = scope.ServiceProvider.GetRequiredService<SeedService>();
-    seedService.SeedData().Wait();
+    //var seedService = scope.ServiceProvider.GetRequiredService<SeedService>();
+    //seedService.SeedData().Wait();
 }
 
 app.UseHttpsRedirection();

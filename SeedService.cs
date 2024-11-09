@@ -1,12 +1,14 @@
-﻿using WebApplicationDemoS4.Models;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplicationDemoS4.Entities;
+using WebApplicationDemoS4.Data;
 
 namespace WebApplicationDemoS4
 {
     public class SeedService
     {
+        /*
         private readonly MongoContext _mongoContext;
 
         public SeedService(MongoContext context)
@@ -92,5 +94,6 @@ namespace WebApplicationDemoS4
                 }
             }
         }
+        */
     }
 }
