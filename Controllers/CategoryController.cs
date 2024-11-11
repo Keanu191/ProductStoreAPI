@@ -107,7 +107,7 @@ namespace WebApplicationDemoS4.Controllers
         }
         */
 
-        private readonly IMongoCollection<Category> _categories;
+        private readonly IMongoCollection<Category>? _categories;
 
         public CategoryController(MongoContext mongoContext)
         {
@@ -121,7 +121,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category?>> GetById(int id)
+        public async Task<ActionResult<Category?>> GetById(string id)
         {
             var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
             var category = _categories.Find(filter).FirstOrDefault();
@@ -145,7 +145,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
             var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
             await _categories.DeleteOneAsync(filter);

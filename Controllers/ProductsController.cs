@@ -106,7 +106,7 @@ namespace WebApplicationDemoS4.Controllers
             return product;
         }
         */
-        private readonly IMongoCollection<Product> _products;
+        private readonly IMongoCollection<Product>? _products;
 
         public ProductsController(MongoContext mongoContext)
         {
@@ -120,7 +120,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product?>> GetById(int id)
+        public async Task<ActionResult<Product?>> GetById(string id)
         {
             var filter = Builders<Product>.Filter.Eq(x => x.Id, id);
             var product = _products.Find(filter).FirstOrDefault();
@@ -144,7 +144,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
             var filter = Builders<Product>.Filter.Eq(x => x.Id, id);
             await _products.DeleteOneAsync(filter);

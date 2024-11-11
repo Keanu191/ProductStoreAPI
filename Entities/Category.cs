@@ -7,8 +7,8 @@ namespace WebApplicationDemoS4.Entities
     public class Category
     {
         [BsonId]
-        [BsonElement("_id"), BsonRepresentation(BsonType.Int32)]
-        public int? Id { get; set; }
+        [BsonElement("_id"), BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
 
         [BsonElement("name"), BsonRepresentation(BsonType.String)]
         public string? Name { get; set; }

@@ -9,12 +9,12 @@ namespace WebApplicationDemoS4.Entities
     {
         [BsonId]
         [BsonElement("_id"), BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
 
         
         [BsonElement("category_id"), BsonRepresentation(BsonType.ObjectId)]
-        public int CategoryId { get; set; }
+        public string CategoryId { get; set; }
 
         [Required]
 
