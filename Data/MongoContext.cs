@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
+using WebApplicationDemoS4.Entities;
 
 namespace WebApplicationDemoS4.Data
 {
@@ -19,5 +20,8 @@ namespace WebApplicationDemoS4.Data
         }
 
         public IMongoDatabase? Database => _database;
+
+        public IMongoCollection<Product> Products;
+        public IMongoCollection<Category> Categories;
     }
 }
