@@ -111,6 +111,9 @@ namespace WebApplicationDemoS4.Controllers
 
         public CategoryController(MongoContext mongoContext)
         {
+            /* this line here is giving me this exception:
+             * System.InvalidOperationException: 'ValueFactory attempted to access the Value property of this instance.'
+             */
             _categories = mongoContext.Database?.GetCollection<Category>("category");
         }
 

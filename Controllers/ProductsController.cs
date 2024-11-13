@@ -18,13 +18,14 @@ namespace WebApplicationDemoS4.Controllers
         public ProductsController(MongoContext mongoContext)
         {
             _mongoContext = mongoContext;
+            _products = mongoContext.Database?.GetCollection<Product>("product");
         }
 
         // Get
         [HttpGet]
         public async Task<ActionResult> GetAllProducts([FromQuery] QueryParameters queryParameters)
         {
-            var products = await _mongoContext.Products
+            var products = await _mongoContext._products
                 .Find(FilterDefinition<Product>.Empty) // Get all products, btw empty filter means no filter
                 .ToListAsync(); // Convert to a list 
 

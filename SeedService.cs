@@ -8,7 +8,6 @@ namespace WebApplicationDemoS4
 {
     public class SeedService
     {
-        /*
         private readonly MongoContext _mongoContext;
 
         public SeedService(MongoContext context)
@@ -43,6 +42,7 @@ namespace WebApplicationDemoS4
                 }
             }
 
+            /*
             // Seed products
             var products = new List<Product>
             {
@@ -93,7 +93,8 @@ namespace WebApplicationDemoS4
                     await _mongoContext.Products.InsertOneAsync(product);
                 }
             }
+            */
         }
-        */
+        
     }
 }
