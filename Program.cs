@@ -23,7 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Register SeedService to seed initial data
-//builder.Services.AddScoped<SeedService>();
+builder.Services.AddScoped<SeedService>();
 
 // Add services to the container
 builder.Services.AddControllers();
