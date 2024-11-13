@@ -9,11 +9,13 @@ namespace WebApplicationDemoS4.Entities
     {
         [BsonId]
         [BsonElement("_id"), BsonRepresentation(BsonType.ObjectId)]
+        // setting ID a string to prevent exception objectid is not a valid representation for an int32serializer
         public string Id { get; set; }
         [Required]
 
         
         [BsonElement("category_id"), BsonRepresentation(BsonType.ObjectId)]
+        // setting CategoryID a string to prevent exception objectid is not a valid representation for an int32serializer
         public string CategoryId { get; set; }
 
         [Required]

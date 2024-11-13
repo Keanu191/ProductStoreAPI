@@ -8,6 +8,7 @@ namespace WebApplicationDemoS4.Entities
     {
         [BsonId]
         [BsonElement("_id"), BsonRepresentation(BsonType.ObjectId)]
+        // setting ID a string to prevent exception objectid is not a valid representation for an int32serializer
         public string? Id { get; set; }
 
         [BsonElement("name"), BsonRepresentation(BsonType.String)]

@@ -21,6 +21,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Get Category collection through database
 //builder.Services.Configure<Category>(builder.Configuration.GetSection("MongoDBSettings"));
 
+// Register MongoContext for interacting with the db
+builder.Services.AddSingleton<MongoContext>();
 
 // Register SeedService to seed initial data
 builder.Services.AddScoped<SeedService>();
@@ -30,8 +32,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// Register MongoContext for interacting with the db
-builder.Services.AddSingleton<MongoContext>();
+
 
 var app = builder.Build();
 
