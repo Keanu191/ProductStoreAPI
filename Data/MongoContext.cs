@@ -22,7 +22,7 @@ namespace WebApplicationDemoS4.Data
         public IMongoDatabase? Database => _database;
 
         // create IMongoCollections for the seed service
-        public IMongoCollection<Product> Products;
-        public IMongoCollection<Category> Categories;
+        public IMongoCollection<Product> Products => _database.GetCollection<Product>("Products");
+        public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
     }
 }

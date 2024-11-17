@@ -21,18 +21,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Get Category collection through database
 //builder.Services.Configure<Category>(builder.Configuration.GetSection("MongoDBSettings"));
 
-// Register MongoContext for interacting with the db
-builder.Services.AddSingleton<MongoContext>();
 
-// Register SeedService to seed initial data
-builder.Services.AddScoped<SeedService>();
 
 // Add services to the container
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+// Register MongoContext for interacting with the db
+builder.Services.AddSingleton<MongoContext>();
+// Register SeedService to seed initial data
+builder.Services.AddScoped<SeedService>();
 
 var app = builder.Build();
 
@@ -46,8 +45,8 @@ if (app.Environment.IsDevelopment())
 // Seed data when the app starts
 using (var scope = app.Services.CreateScope())
 {
-    //var seedService = scope.ServiceProvider.GetRequiredService<SeedService>();
-    //seedService.SeedData().Wait();
+    var seedService = scope.ServiceProvider.GetRequiredService<SeedService>();
+    await seedService.SeedData();
 }
 
 app.UseHttpsRedirection();

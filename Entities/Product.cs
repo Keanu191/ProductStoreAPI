@@ -8,15 +8,14 @@ namespace WebApplicationDemoS4.Entities
     public class Product
     {
         [BsonId]
-        [BsonElement("_id"), BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("_id"), BsonRepresentation(BsonType.Int32)]
         // setting ID a string to prevent exception objectid is not a valid representation for an int32serializer
-        public string Id { get; set; }
-        [Required]
+        public int Id { get; set; }
 
-        
-        [BsonElement("category_id"), BsonRepresentation(BsonType.ObjectId)]
+        [Required]
+        [BsonElement("category_id"), BsonRepresentation(BsonType.Int32)]
         // setting CategoryID a string to prevent exception objectid is not a valid representation for an int32serializer
-        public string CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         [Required]
 
@@ -39,9 +38,15 @@ namespace WebApplicationDemoS4.Entities
         [BsonElement("is_available"), BsonRepresentation(BsonType.Boolean)]
         public bool IsAvailable { get; set; }
 
+
+        [Required]  // Ensures that the sku field is required
+        public string? Sku { get; internal set; }
+
         [JsonIgnore]
 
-        [BsonElement("category"), BsonRepresentation(BsonType.String)]
+        [BsonElement("category")]
         public virtual Category? Category { get; set; }
+
+
     }
 }

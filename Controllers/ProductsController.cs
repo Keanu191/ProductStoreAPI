@@ -108,20 +108,58 @@ namespace WebApplicationDemoS4.Controllers
         }
         */
         private readonly IMongoCollection<Product>? _products;
+        private readonly MongoContext _mongoContext;
 
         public ProductsController(MongoContext mongoContext)
         {
-            _products = mongoContext.Database?.GetCollection<Product>("product");
+            _products = mongoContext.Database?.GetCollection<Product>("Products");
+            _mongoContext = mongoContext;
+           
+
+
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Product>> Get()
+        public async Task<IEnumerable<Product>> Get([FromQuery] ProductParameterQuery queryParameters)
         {
-            return await _products.Find(FilterDefinition<Product>.Empty).ToListAsync();
+            var filter = Builders<Product>.Filter.Empty; // Start with an empty filter
+
+            // Apply MinPrice filter if provided
+            if (queryParameters.MinPrice != null)
+            {
+                filter &= Builders<Product>.Filter.Gte(p => p.Price, queryParameters.MinPrice.Value);
+            }
+
+            // Apply MaxPrice filter if provided
+            if (queryParameters.MaxPrice != null)
+            {
+                filter &= Builders<Product>.Filter.Lte(p => p.Price, queryParameters.MaxPrice.Value);
+            }
+
+            // Apply pagination
+            var productsQuery = _mongoContext.Products.Find(filter)
+                                                      .Skip(queryParameters.Size * (queryParameters.Page - 1))
+                                                      .Limit(queryParameters.Size);
+
+            // Fetch data asynchronously
+            var products = await productsQuery.ToListAsync();
+
+            if (!string.IsNullOrEmpty(queryParameters.Sku))
+            {
+                products = products.Where(p => p.Sku == queryParameters.Sku).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.Name))
+            {
+                products = products.Where(p => p.Name.ToLower().Contains(queryParameters.Name.ToLower())).ToList();
+            }
+
+            return products;
+
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product?>> GetById(string id)
+        public async Task<ActionResult<Product?>> GetById(int id)
         {
             var filter = Builders<Product>.Filter.Eq(x => x.Id, id);
             var product = _products.Find(filter).FirstOrDefault();
@@ -145,7 +183,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(int id)
         {
             var filter = Builders<Product>.Filter.Eq(x => x.Id, id);
             await _products.DeleteOneAsync(filter);

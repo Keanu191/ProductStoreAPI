@@ -114,7 +114,9 @@ namespace WebApplicationDemoS4.Controllers
             /* this line here is giving me this exception:
              * System.InvalidOperationException: 'ValueFactory attempted to access the Value property of this instance.'
              */
-            _categories = mongoContext.Database?.GetCollection<Category>("category");
+           
+             _categories = mongoContext.Database.GetCollection<Category>("Categories");
+            
         }
 
         [HttpGet]
@@ -124,7 +126,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category?>> GetById(string id)
+        public async Task<ActionResult<Category?>> GetById(int id)
         {
             var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
             var category = _categories.Find(filter).FirstOrDefault();
@@ -148,7 +150,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(int id)
         {
             var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
             await _categories.DeleteOneAsync(filter);
