@@ -14,5 +14,24 @@
 
             set { _pageSize = Math.Min(_pageSize, value); }
         }
+
+        public string sortBy { get; set; } = "Id";
+
+        public string sortOrder = "asc";
+
+        public string SortOrder
+        {
+            get
+            {
+                return sortOrder;
+            }
+            set
+            {
+                if (value == "asc" || value == "desc")
+                {
+                    sortOrder = value;
+                }
+            }
+        }
     }
 }

@@ -154,6 +154,20 @@ namespace WebApplicationDemoS4.Controllers
                 products = products.Where(p => p.Name.ToLower().Contains(queryParameters.Name.ToLower())).ToList();
             }
 
+            if (!string.IsNullOrEmpty(queryParameters.sortBy))
+            {
+                if (typeof(Product).GetProperty(queryParameters.sortBy) != null)
+                {
+                    // Convert List<Product> to IQueryable<Product>
+                    var productsQueryable = products.AsQueryable();
+
+                    // Apply the custom sorting
+                    productsQueryable = productsQueryable.OrderByCustom(queryParameters.sortBy, queryParameters.SortOrder);
+
+                    // If you want to return the sorted list back, convert it to List again
+                    products = productsQueryable.ToList();
+                }
+            }
             return products;
 
         }
