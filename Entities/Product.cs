@@ -40,7 +40,8 @@ namespace WebApplicationDemoS4.Entities
 
 
         [Required]  // Ensures that the sku field is required
-        public string? Sku { get; internal set; }
+        [BsonElement("sku"), BsonRepresentation(BsonType.String)]
+        public string? Sku { get; set; }
 
         [JsonIgnore]
 
