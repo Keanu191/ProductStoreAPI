@@ -8,16 +8,16 @@ using WebApplicationDemoS4.Models;
 
 namespace WebApplicationDemoS4.Controllers
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     //[Route("api/[controller]")]
     //[ApiController]
     [Route("v{v:apiVersion}/products")]
-    public class ProductsV1Controller : ControllerBase
+    public class ProductsV2Controller : ControllerBase
     {
         private readonly IMongoCollection<Product>? _products;
         private readonly MongoContext _mongoContext;
 
-        public ProductsV1Controller(MongoContext mongoContext)
+        public ProductsV2Controller(MongoContext mongoContext)
         {
             _products = mongoContext.Database?.GetCollection<Product>("Products");
             _mongoContext = mongoContext;
