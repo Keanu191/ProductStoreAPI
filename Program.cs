@@ -20,6 +20,9 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions = true;
     options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
     options.AssumeDefaultVersionWhenUnspecified = true;
+
+    // Add Query String
+    options.ApiVersionReader = new QueryStringApiVersionReader("MVC-api-version");
 });
 
 
@@ -37,12 +40,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.SwaggerEndpoint("/swagger/v2/swagger.json", "My API V2");
-        //c.RoutePrefix = string.Empty;
-    });
+    app.UseSwaggerUI();
+} else
+{
+    // enforce https
+    app.UseHsts();
 }
 
 // Seed data when the app starts

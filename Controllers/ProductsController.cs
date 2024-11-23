@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -10,8 +10,9 @@ namespace WebApplicationDemoS4.Controllers
 {
     [ApiVersion("1.0")]
     //[Route("api/[controller]")]
-    //[ApiController]
-    [Route("v{v:apiVersion}/products")]
+    [Route("api/v1/products")]
+    [ApiController]
+
     public class ProductsV1Controller : ControllerBase
     {
         private readonly IMongoCollection<Product>? _products;
@@ -108,6 +109,7 @@ namespace WebApplicationDemoS4.Controllers
             return Ok();
         }
     }
+
 
 }
 

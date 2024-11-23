@@ -9,9 +9,8 @@ using WebApplicationDemoS4.Models;
 namespace WebApplicationDemoS4.Controllers
 {
     [ApiVersion("2.0")]
-    //[Route("api/[controller]")]
+    [Route("api/v2/products")]
     //[ApiController]
-    [Route("v{v:apiVersion}/products")]
     public class ProductsV2Controller : ControllerBase
     {
         private readonly IMongoCollection<Product>? _products;
@@ -39,6 +38,9 @@ namespace WebApplicationDemoS4.Controllers
             {
                 filter &= Builders<Product>.Filter.Lte(p => p.Price, queryParameters.MaxPrice.Value);
             }
+
+            // Add filter to get only available products (IsAvailable == true)
+            filter &= Builders<Product>.Filter.Eq(p => p.IsAvailable, true);
 
             // Apply pagination
             var productsQuery = _mongoContext.Products.Find(filter)
