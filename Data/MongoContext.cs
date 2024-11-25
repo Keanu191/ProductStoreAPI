@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using AspNetCore.Identity.MongoDbCore.Infrastructure;
+using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using WebApplicationDemoS4.Entities;
 
@@ -24,5 +25,7 @@ namespace WebApplicationDemoS4.Data
         // create IMongoCollections for the seed service
         public IMongoCollection<Product> Products => _database.GetCollection<Product>("Products");
         public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
+
+        // 25/11/2024 ASP.NET Core Identity MongoDB tutorial
     }
 }

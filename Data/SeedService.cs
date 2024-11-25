@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplicationDemoS4.Entities;
-using WebApplicationDemoS4.Data;
 using System;
 
-namespace WebApplicationDemoS4
+namespace WebApplicationDemoS4.Data
 {
     public class SeedService
     {
@@ -34,11 +33,11 @@ namespace WebApplicationDemoS4
             // add try catch for testing purposes
             try
             {
-                
-                
+
+
                 foreach (var category in categories)
                 {
-                    
+
                     var existingCategory = await _mongoContext.Categories
                         .Find(c => c.Name == category.Name)
                         .FirstOrDefaultAsync();
@@ -48,9 +47,9 @@ namespace WebApplicationDemoS4
                     {
                         await _mongoContext.Categories.InsertOneAsync(category);
                     }
-                    
+
                 }
-                
+
 
 
                 // Seed products
@@ -93,7 +92,7 @@ namespace WebApplicationDemoS4
 
                 foreach (var product in products)
                 {
-                    
+
                     var existingProduct = await _mongoContext.Products
                         .Find(p => p.Name == product.Name)
                         .FirstOrDefaultAsync();
@@ -103,7 +102,7 @@ namespace WebApplicationDemoS4
                     {
                         await _mongoContext.Products.InsertOneAsync(product);
                     }
-                    
+
                 }
             }
             catch (Exception ex)

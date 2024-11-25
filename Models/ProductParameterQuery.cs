@@ -1,10 +1,8 @@
-﻿using WebApplicationDemoS4.Models;
-
-namespace WebApplicationDemoS4
+﻿namespace WebApplicationDemoS4.Models
 {
     public class ProductParameterQuery : QueryParameters
     {
-        public decimal ? MinPrice { get; set; }
+        public decimal? MinPrice { get; set; }
 
         public decimal? MaxPrice { get; set; }
 

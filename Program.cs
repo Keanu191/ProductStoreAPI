@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using MongoAuthenticatorAPI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,12 @@ BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.Bson
 //add mongoIdentityConfiguration...
 var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
 {
+    // im aware that this is hardcoded and im doing this as I'm getting exceptions if I don't hard code the connection string/db name a reference to MongoContext just dosen't cut it
+    MongoDbSettings = new MongoDbSettings
+    {
+        ConnectionString = "mongodb+srv://keanufarro8:YxR2HHZFsUmxHQQm@clustermvcat2.p0spc.mongodb.net/ProductsDB",
+        DatabaseName = "ProductsDB"
+    },
     IdentityOptionsAction = options =>
     {
         options.Password.RequireDigit = false;
@@ -71,7 +78,7 @@ builder.Services.AddAuthentication(x =>
         ValidateLifetime = true,
         ValidIssuer = "https://localhost:5001",
         ValidAudience = "https://localhost:5001",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1swek3u4uo2u4a6e")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("5A13E255A13E255A13E25E543AB958E8868B1CFEAA3A13E25E543AB958E8868B1CFEAA35E543AB958E8868B1CFEAA3E543AB958E8868B1CFEAA3")),
         ClockSkew = TimeSpan.Zero
 
     };

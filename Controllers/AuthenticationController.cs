@@ -116,7 +116,7 @@ namespace MongoAuthenticatorAPI.Controllers
                 var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x));
                 claims.AddRange(roleClaims);
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1swek3u4uo2u4a6e"));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("5A13E255A13E255A13E25E543AB958E8868B1CFEAA3A13E25E543AB958E8868B1CFEAA35E543AB958E8868B1CFEAA3E543AB958E8868B1CFEAA3"));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                 var expires = DateTime.Now.AddMinutes(30);
 
