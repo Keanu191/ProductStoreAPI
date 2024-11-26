@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApplicationDemoS4.Entities;
 using System;
+using WebApplicationDemoS4.Settings;
 
-namespace WebApplicationDemoS4.Data
+namespace WebApplicationDemoS4.Settings
 {
     public class SeedService
     {

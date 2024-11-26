@@ -22,10 +22,6 @@
     <PackageReference Include="MongoDB.Driver" Version="2.29.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MVC_Web_App\MVC_Web_App.csproj" />
-  </ItemGroup>
 <PropertyGroup>
   <TargetFramework>net8.0</TargetFramework>
   <Nullable>enable</Nullable>

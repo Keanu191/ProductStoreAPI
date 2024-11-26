@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using WebApplicationDemoS4.Entities;
 
-namespace WebApplicationDemoS4.Data
+namespace WebApplicationDemoS4.Settings
 {
     public class MongoContext
     {
@@ -27,5 +27,9 @@ namespace WebApplicationDemoS4.Data
         public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
 
         // 25/11/2024 ASP.NET Core Identity MongoDB tutorial
+        public string Name { get; init; }
+        public string Host { get; init; }
+        public int Port { get; init; }
+        public string ConnectionString => $"mongodb://{Host}:{Port}";
     }
 }

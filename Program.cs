@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApplicationDemoS4;
 using WebApplicationDemoS4.Entities;
-using WebApplicationDemoS4.Data;
+using WebApplicationDemoS4.Settings;
 using MongoDB.Bson.IO;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // THIS CODE WAS TAKEN AND USED FROM THIS YOUTUBE TUTORIAL FOR AUTHENTICATION: https://www.youtube.com/watch?v=2R4RW7WaIWQ
 

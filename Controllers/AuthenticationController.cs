@@ -102,7 +102,24 @@ namespace MongoAuthenticatorAPI.Controllers
             {
 
                 var user = await _userManager.FindByEmailAsync(request.Email);
-                if (user is null) return new LoginResponse { Message = "Invalid email/password", Success = false };
+                if (user == null)
+                {
+                    return new LoginResponse
+                    { 
+                        Message = "Invalid email/password", Success = false 
+                    };
+                }
+
+                // Password Check
+                var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+                if (!isPasswordValid)
+                {
+                    return new LoginResponse
+                    {
+                        Message = "Invalid email or password",
+                        Success = false
+                    };
+                }
 
                 //all is well if ew reach here
                 var claims = new List<Claim>

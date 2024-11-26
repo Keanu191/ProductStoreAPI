@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
-using WebApplicationDemoS4.Data;
 using WebApplicationDemoS4.Entities;
 using WebApplicationDemoS4.Models;
+using WebApplicationDemoS4.Settings;
 
 namespace WebApplicationDemoS4.Controllers
 {
