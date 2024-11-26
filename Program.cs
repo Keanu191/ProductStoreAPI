@@ -99,6 +99,7 @@ builder.Services.AddApiVersioning(options =>
     options.ApiVersionReader = new QueryStringApiVersionReader("MVC-api-version");
 });
 
+// Enable Cors... to you know get the products to display XD
 // https://stackoverflow.com/questions/70511588/how-to-enable-cors-in-asp-net-core-6-0-web-api-project
 builder.Services.AddCors(options =>
 {
@@ -106,7 +107,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             // Allow frontend origin
-            policy.WithOrigins("https://localhost:7043") 
+            policy.WithOrigins("https://localhost:7167") 
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
