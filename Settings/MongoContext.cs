@@ -26,10 +26,5 @@ namespace WebApplicationDemoS4.Settings
         public IMongoCollection<Product> Products => _database.GetCollection<Product>("Products");
         public IMongoCollection<Category> Categories => _database.GetCollection<Category>("Categories");
 
-        // 25/11/2024 ASP.NET Core Identity MongoDB tutorial
-        public string Name { get; init; }
-        public string Host { get; init; }
-        public int Port { get; init; }
-        public string ConnectionString => $"mongodb://{Host}:{Port}";
     }
 }
