@@ -4,7 +4,7 @@ using MongoDbGenericRepository.Attributes;
 
 namespace MongoAuthenticatorAPI.Models
 {
-    [CollectionName("roles")]
+    [CollectionName("Role")]
     public class ApplicationRole : MongoIdentityRole<Guid>
     {
         

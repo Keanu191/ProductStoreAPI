@@ -18,6 +18,7 @@ using MongoAuthenticatorAPI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
+using Microsoft.OpenApi.Models;
 
 
 
@@ -37,7 +38,7 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
     // im aware that this is hardcoded and im doing this as I'm getting exceptions if I don't hard code the connection string/db name a reference to MongoContext just dosen't cut it
     MongoDbSettings = new MongoDbSettings
     {
-        ConnectionString = "mongodb+srv://dbuser:123@cluster0.k7wz9.mongodb.net/",
+        ConnectionString = "mongodb+srv://keanufarro8:123@clustermvcat2.p0spc.mongodb.net/",
         DatabaseName = "ProductsDB"
     },
     IdentityOptionsAction = options =>
@@ -115,7 +116,34 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Add JWT authentication to swagger UI
+// Code taken from youtube tutorial: https://www.youtube.com/watch?v=nVHEnRA8LL4
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorisation",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 // Register MongoContext for interacting with the db
 builder.Services.AddSingleton<MongoContext>();
