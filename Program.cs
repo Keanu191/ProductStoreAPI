@@ -87,6 +87,10 @@ builder.Services.AddAuthentication(x =>
 
     };
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+});
 // Add services to the container
 builder.Services.AddControllers();
 

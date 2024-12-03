@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 30074191 / Keanu Farro
+ * CODE TAKEN FROM YOUTUBE TUTORIAL: https://www.youtube.com/watch?v=2R4RW7WaIWQ
+ */
+
+
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -64,8 +70,8 @@ namespace MongoAuthenticatorAPI.Controllers
                 var createUserResult = await _userManager.CreateAsync(userExists, request.Password);
                 if(!createUserResult.Succeeded) return new RegisterResponse { Message = $"Create user failed {createUserResult?.Errors?.First()?.Description}", Success = false };
                 //user is created...
-                //then add user to a role...
-                var addUserToRoleResult = await _userManager.AddToRoleAsync(userExists, "USER");
+                //then add user to a role, will do this as ADMIN
+                var addUserToRoleResult = await _userManager.AddToRoleAsync(userExists, "Admin");
                 if(!addUserToRoleResult.Succeeded) return new RegisterResponse { Message = $"Create user succeeded but could not add user to role {addUserToRoleResult?.Errors?.First()?.Description}", Success = false };
 
                 //all is still well..

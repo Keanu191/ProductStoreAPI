@@ -1,3 +1,8 @@
+/*
+ * 30074191 / Keanu Farro
+ * Edited Source Code from the following tutorial: https://www.youtube.com/watch?v=Gxf7zBl5Z64
+ */
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +29,7 @@ namespace WebApplicationDemoS4.Controllers
             _mongoContext = mongoContext;
         }
 
+        #region Public
         [HttpGet]
         public async Task<IEnumerable<Product>> Get([FromQuery] ProductParameterQuery queryParameters)
         {
@@ -108,6 +114,100 @@ namespace WebApplicationDemoS4.Controllers
             await _products.DeleteOneAsync(filter);
             return Ok();
         }
+        #endregion
+
+        #region ADMIN
+        // Add admin policy to all CRUD functions and then reference it through Program.cs
+        [HttpGet("ADMIN_GET")]
+        [Authorize(Policy = "Admin")]
+        public async Task<IEnumerable<Product>> adminGet([FromQuery] ProductParameterQuery queryParameters)
+        {
+            var filter = Builders<Product>.Filter.Empty; // Start with an empty filter
+
+            // Apply MinPrice filter if provided
+            if (queryParameters.MinPrice != null)
+            {
+                filter &= Builders<Product>.Filter.Gte(p => p.Price, queryParameters.MinPrice.Value);
+            }
+
+            // Apply MaxPrice filter if provided
+            if (queryParameters.MaxPrice != null)
+            {
+                filter &= Builders<Product>.Filter.Lte(p => p.Price, queryParameters.MaxPrice.Value);
+            }
+
+            // Apply pagination
+            var productsQuery = _mongoContext.Products.Find(filter)
+                                                      .Skip(queryParameters.Size * (queryParameters.Page - 1))
+                                                      .Limit(queryParameters.Size);
+
+            // Fetch data asynchronously
+            var products = await productsQuery.ToListAsync();
+
+            if (!string.IsNullOrEmpty(queryParameters.Sku))
+            {
+                products = products.Where(p => p.Sku == queryParameters.Sku).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.Name))
+            {
+                products = products.Where(p => p.Name.ToLower().Contains(queryParameters.Name.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.sortBy))
+            {
+                if (typeof(Product).GetProperty(queryParameters.sortBy) != null)
+                {
+                    // Convert List<Product> to IQueryable<Product>
+                    var productsQueryable = products.AsQueryable();
+
+                    // Apply the custom sorting
+                    productsQueryable = productsQueryable.OrderByCustom(queryParameters.sortBy, queryParameters.SortOrder);
+
+                    // If you want to return the sorted list back, convert it to List again
+                    products = productsQueryable.ToList();
+                }
+            }
+            return products;
+
+        }
+
+        [HttpGet("GetID_ADMIN, {id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<Product?>> adminGetById(int id)
+        {
+            var filter = Builders<Product>.Filter.Eq(x => x.Id, id);
+            var product = _products.Find(filter).FirstOrDefault();
+            return product is not null ? Ok(product) : NotFound();
+        }
+
+        [HttpPost("Post_ADMIN")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> adminPost(Product product)
+        {
+            await _products.InsertOneAsync(product);
+            return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+        }
+
+        [HttpPut("Put_ADMIN")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> adminUpdate(Product product)
+        {
+            var filter = Builders<Product>.Filter.Eq(x => x.Id, product.Id);
+
+            await _products.ReplaceOneAsync(filter, product);
+            return Ok();
+        }
+
+        [HttpDelete("ADMIN_DELETE, {id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> adminDelete(int id)
+        {
+            var filter = Builders<Product>.Filter.Eq(x => x.Id, id);
+            await _products.DeleteOneAsync(filter);
+            return Ok();
+        }
+        #endregion
     }
 
 

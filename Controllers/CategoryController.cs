@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*
+ * 30074191 / Keanu Farro
+ * Edited Source Code from the following tutorial: https://www.youtube.com/watch?v=Gxf7zBl5Z64
+ */
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -12,113 +18,17 @@ namespace WebApplicationDemoS4.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        /*
-        private readonly MongoContext _mongoContext;
-
-        public CategoryController(MongoContext mongoContext)
-        {
-            _mongoContext = mongoContext;
-        }
-
-        // Get
-        [HttpGet]
-        public async Task<ActionResult> GetAllCategories([FromQuery] QueryParameters queryParameters)
-        {
-            var categories = await _mongoContext.Categories
-                .Find(FilterDefinition<Category>.Empty) // Get all categories, btw empty filter means no filter
-                .ToListAsync(); // Convert to a list 
-
-            // Apply pagination (Skip and Take are synchronous)
-            var pagedCategories = categories
-                .Skip(queryParameters.Size * (queryParameters.Page - 1))
-                .Take(queryParameters.Size)
-                .ToList();  // Convert to list after applying Skip/Take
-
-            return Ok(pagedCategories.ToArray());
-        }
-
-        [HttpGet, Route("get")]
-        public async Task<ActionResult> GetCategory(int id)
-        {
-            // Use without projection
-            var category = await _mongoContext.Categories.FindAsync(p => p.Id == id);
-            // here we use Ok product
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return Ok(category);
-        }
-
-        // Post
-        [HttpPost]
-
-        public ActionResult<Product> PostCategory(Category category)
-        {
-            _ = _mongoContext.Categories.InsertOneAsync(category);
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
-        }
-
-        // Put
-        [HttpPut("{id}")]
-        public async Task<ActionResult> PutCategory(int id, [FromBody] Category category)
-        {
-            // Define a filter to match the product by ID
-            var filter = Builders<Category>.Filter.Eq(p => p.Id, id);
-
-            try
-            {
-                await _mongoContext.Categories.ReplaceOneAsync(filter, category);
-            }
-            // maybe the product has been modified already
-            catch (DbUpdateConcurrencyException ex)
-            {
-                // using a CountDocumentsAsync insteaf of the Any method that was previously used in shop context
-                if (await _mongoContext.Categories.CountDocumentsAsync(p => p.Id == id) == 0)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-        // delete
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Category>> DeleteCategory(int id)
-        {
-            // Find the category to delete using the ID
-            var filter = Builders<Category>.Filter.Eq(p => p.Id, id);
-            var category = await _mongoContext.Categories.Find(filter).FirstOrDefaultAsync();
-
-            if (category == null)
-            {
-                // this will be the error 404 response
-                return NotFound();
-            }
-
-            // Delete the product from the collection
-            await _mongoContext.Categories.DeleteOneAsync(filter);
-
-            return category;
-        }
-        */
+        
 
         private readonly IMongoCollection<Category>? _categories;
 
         public CategoryController(MongoContext mongoContext)
-        {
-            /* this line here is giving me this exception:
-             * System.InvalidOperationException: 'ValueFactory attempted to access the Value property of this instance.'
-             */
-           
+        {  
              _categories = mongoContext.Database.GetCollection<Category>("Categories");
             
         }
 
+        #region Public
         [HttpGet]
         public async Task<IEnumerable<Category>> Get()
         {
@@ -156,5 +66,52 @@ namespace WebApplicationDemoS4.Controllers
             await _categories.DeleteOneAsync(filter);
             return Ok();
         }
+        #endregion
+
+        #region Admin
+        // Add admin policy to all CRUD functions and then reference it through Program.cs
+        [HttpGet("ADMIN_GET")]
+        [Authorize(Policy = "Admin")]
+        public async Task<IEnumerable<Category>> adminGet()
+        {
+            return await _categories.Find(FilterDefinition<Category>.Empty).ToListAsync();
+        }
+
+        [HttpGet("Admin_{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<Category?>> adminGetById(int id)
+        {
+            var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
+            var category = _categories.Find(filter).FirstOrDefault();
+            return category is not null ? Ok(category) : NotFound();
+        }
+
+        [HttpPost("ADMIN_POST")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> adminPost(Category category)
+        {
+            await _categories.InsertOneAsync(category);
+            return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+        }
+
+        [HttpPut("ADMIN_PUT")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> adminUpdate(Category category)
+        {
+            var filter = Builders<Category>.Filter.Eq(x => x.Id, category.Id);
+
+            await _categories.ReplaceOneAsync(filter, category);
+            return Ok();
+        }
+
+        [HttpDelete("ADMINDELETE_{id}")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult> adminDelete(int id)
+        {
+            var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
+            await _categories.DeleteOneAsync(filter);
+            return Ok();
+        }
+        #endregion
     }
 }

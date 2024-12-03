@@ -1,4 +1,9 @@
-﻿namespace WebApplicationDemoS4.Models
+﻿/*
+ * 30074191 / Keanu Farro
+ * code taken from learning content
+ */
+
+namespace WebApplicationDemoS4.Models
 {
     public class QueryParameters
     {

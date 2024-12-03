@@ -1,4 +1,9 @@
-﻿using AspNetCore.Identity.MongoDbCore.Infrastructure;
+﻿/*
+ * 30074191 / Keanu Farro
+ * Code taken from tutorial: https://www.youtube.com/watch?v=Gxf7zBl5Z64
+ */
+
+using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using WebApplicationDemoS4.Entities;
