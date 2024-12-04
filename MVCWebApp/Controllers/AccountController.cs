@@ -41,12 +41,13 @@ namespace MVCWebApp.Controllers
                 {
                     await signInManager.SignOutAsync();
                     var role = await userManager.GetRolesAsync(appUser);
-                    Debug.WriteLine($"Roles for user {appUser.UserName}: {string.Join(", ", role)}");
 
-                    if (role.Count == 0)
-                    {
-                        ModelState.AddModelError(nameof(email), "User has no roles assigned.");
-                    }
+                    // Add a TraceListener to the Trace output
+                    Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));  // Writes to the console
+                    Trace.AutoFlush = true;  // Ensures it writes immediately
+                    // Role is coming back as nothing how weird
+                    Trace.WriteLine($"Roles for user {appUser.UserName}: {string.Join(", ", appUser.CurrentRole)}");
+
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, password, false, false);
                     if (result.Succeeded)
                     {
