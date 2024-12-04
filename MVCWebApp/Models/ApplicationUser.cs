@@ -8,5 +8,7 @@ namespace MVCWebApp.Models
     {
         // to prevent exception
         public string FullName { get; set; } = string.Empty;
+
+        public string CurrentRole { get; set; } = string.Empty;
     }
 }

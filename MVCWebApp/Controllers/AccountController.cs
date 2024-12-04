@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Diagnostics;
 
 namespace MVCWebApp.Controllers
 {
@@ -12,11 +14,13 @@ namespace MVCWebApp.Controllers
 
         private UserManager<ApplicationUser> userManager;
         private SignInManager<ApplicationUser> signInManager;
+        private RoleManager<ApplicationRole> roleManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         public IActionResult Login()
@@ -32,9 +36,17 @@ namespace MVCWebApp.Controllers
             if (ModelState.IsValid)
             {
                 ApplicationUser appUser = await userManager.FindByEmailAsync(email);
+
                 if (appUser != null)
                 {
                     await signInManager.SignOutAsync();
+                    var role = await userManager.GetRolesAsync(appUser);
+                    Debug.WriteLine($"Roles for user {appUser.UserName}: {string.Join(", ", role)}");
+
+                    if (role.Count == 0)
+                    {
+                        ModelState.AddModelError(nameof(email), "User has no roles assigned.");
+                    }
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, password, false, false);
                     if (result.Succeeded)
                     {
@@ -57,7 +69,7 @@ namespace MVCWebApp.Controllers
         [Route("Account/AccessDenied")]
         public ActionResult AccessDenied()
         {
-            return View();
+           return View();
         }
 
     }

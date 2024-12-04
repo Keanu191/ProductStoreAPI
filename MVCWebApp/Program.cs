@@ -3,6 +3,11 @@
  * THE FRONTEND WAS DONE WITH CODE TAKEN FROM THIS TUTORIAL: https://www.yogihosting.com/aspnet-core-identity-mongodb/
  */
 
+/*
+ * 4/12/2024:
+
+ * Query the object ID to the roles table and then pick up if the name is equals to admin or not then load up the admin interface
+ */
 using Microsoft.AspNetCore.Authentication;
 using MVCWebApp.Models;
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +20,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
         .AddMongoDbStores<ApplicationUser, ApplicationRole, Guid>
         (
-            "mongodb+srv://keanufarro8:123@clustermvcat2.p0spc.mongodb.net/", "ProductsDB"
+            "mongodb+srv://dbuser:123@cluster0.k7wz9.mongodb.net/", "ProductsDB"
         );
 
 

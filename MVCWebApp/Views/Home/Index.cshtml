@@ -11,25 +11,28 @@
 
 @section Scripts {
     <script>
-        let url = "https://localhost:7283/api/v1/products"
-        let productsList = document.getElementById("products-list");
+        let url = "https://localhost:7283/api/v1/products/Public"
+        
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => showProducts(data))
-            .catch(ex => {
-                alert("error ")
-                console.error(ex);
-            });
+        window.onload = async () => {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => showProducts(data))
+                .catch(ex => {
+                    alert("error ")
+                    console.error(ex);
+                });
+        };
 
             function showProducts(products) {
+                let productsList = document.getElementById("products-list");
                 products.forEach(product => {
                     let li = document.createElement("li");
                     let text = `${product.name} ($${product.price})`;
                     li.append(document.createTextNode(text));
                     productsList.appendChild(li);
                 });
-            }
+        };
     </script>
 }
 

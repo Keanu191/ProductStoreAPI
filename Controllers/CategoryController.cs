@@ -28,14 +28,31 @@ namespace WebApplicationDemoS4.Controllers
             
         }
 
-        #region Public
+        #region public functions
+        // remove Authorise Policy block of code to allow a non logged in user to GET categories
+        [HttpGet("Public")]
+        public async Task<IEnumerable<Category>> publicGet()
+        {
+            return await _categories.Find(FilterDefinition<Category>.Empty).ToListAsync();
+        }
+
+        [HttpGet("Public{id}")]
+        public async Task<ActionResult<Category?>> publicGetById(int id)
+        {
+            var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
+            var category = _categories.Find(filter).FirstOrDefault();
+            return category is not null ? Ok(category) : NotFound();
+        }
+        #endregion
         [HttpGet]
+        [Authorize(Policy = "Admin")]
         public async Task<IEnumerable<Category>> Get()
         {
             return await _categories.Find(FilterDefinition<Category>.Empty).ToListAsync();
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<Category?>> GetById(int id)
         {
             var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
@@ -44,6 +61,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> Post(Category category)
         {
             await _categories.InsertOneAsync(category);
@@ -51,6 +69,7 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpPut]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> Update(Category category)
         {
             var filter = Builders<Category>.Filter.Eq(x => x.Id, category.Id);
@@ -60,58 +79,12 @@ namespace WebApplicationDemoS4.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> Delete(int id)
         {
             var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
             await _categories.DeleteOneAsync(filter);
             return Ok();
         }
-        #endregion
-
-        #region Admin
-        // Add admin policy to all CRUD functions and then reference it through Program.cs
-        [HttpGet("ADMIN_GET")]
-        [Authorize(Policy = "Admin")]
-        public async Task<IEnumerable<Category>> adminGet()
-        {
-            return await _categories.Find(FilterDefinition<Category>.Empty).ToListAsync();
-        }
-
-        [HttpGet("Admin_{id}")]
-        [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<Category?>> adminGetById(int id)
-        {
-            var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
-            var category = _categories.Find(filter).FirstOrDefault();
-            return category is not null ? Ok(category) : NotFound();
-        }
-
-        [HttpPost("ADMIN_POST")]
-        [Authorize(Policy = "Admin")]
-        public async Task<ActionResult> adminPost(Category category)
-        {
-            await _categories.InsertOneAsync(category);
-            return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
-        }
-
-        [HttpPut("ADMIN_PUT")]
-        [Authorize(Policy = "Admin")]
-        public async Task<ActionResult> adminUpdate(Category category)
-        {
-            var filter = Builders<Category>.Filter.Eq(x => x.Id, category.Id);
-
-            await _categories.ReplaceOneAsync(filter, category);
-            return Ok();
-        }
-
-        [HttpDelete("ADMINDELETE_{id}")]
-        [Authorize(Policy = "Admin")]
-        public async Task<ActionResult> adminDelete(int id)
-        {
-            var filter = Builders<Category>.Filter.Eq(x => x.Id, id);
-            await _categories.DeleteOneAsync(filter);
-            return Ok();
-        }
-        #endregion
     }
 }

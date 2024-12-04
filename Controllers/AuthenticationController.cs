@@ -58,20 +58,21 @@ namespace MongoAuthenticatorAPI.Controllers
                 if(userExists != null) return new RegisterResponse { Message = "User already exists", Success = false };
 
                 //if we get here, no user with this email..
-
+          
                 userExists = new ApplicationUser
                 {
                     FullName = request.FullName,
                     Email = request.Email,
                     ConcurrencyStamp = Guid.NewGuid().ToString(),
                     UserName = request.Email,
+                    CurrentRole = "Admin"
 
                 };
                 var createUserResult = await _userManager.CreateAsync(userExists, request.Password);
                 if(!createUserResult.Succeeded) return new RegisterResponse { Message = $"Create user failed {createUserResult?.Errors?.First()?.Description}", Success = false };
                 //user is created...
                 //then add user to a role, will do this as ADMIN
-                var addUserToRoleResult = await _userManager.AddToRoleAsync(userExists, "Admin");
+                var addUserToRoleResult = await _userManager.AddToRoleAsync(userExists, userExists.CurrentRole);
                 if(!addUserToRoleResult.Succeeded) return new RegisterResponse { Message = $"Create user succeeded but could not add user to role {addUserToRoleResult?.Errors?.First()?.Description}", Success = false };
 
                 //all is still well..

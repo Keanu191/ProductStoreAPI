@@ -31,13 +31,14 @@ namespace MVCWebApp.Controllers
                 ApplicationUser appUser = new ApplicationUser
                 {
                     UserName = user.Name,
-                    Email = user.Email
+                    Email = user.Email,
+                    CurrentRole = "Admin"
                 };
 
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
 
                 // Adding User to Admin Role
-                await userManager.AddToRoleAsync(appUser, "Admin");
+                await userManager.AddToRoleAsync(appUser, appUser.CurrentRole);
 
                 if (result.Succeeded)
                     ViewBag.Message = "User Created Successfully";
@@ -56,6 +57,7 @@ namespace MVCWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                //var role = roleManager.FindByIDAsync
                 IdentityResult result = await roleManager.CreateAsync(new ApplicationRole()  { Name = name });
                 if (result.Succeeded)
                     ViewBag.Message = "Role Created Successfully";

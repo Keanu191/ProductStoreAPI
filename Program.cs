@@ -38,7 +38,7 @@ var mongoDbIdentityConfig = new MongoDbIdentityConfiguration
     // im aware that this is hardcoded and im doing this as I'm getting exceptions if I don't hard code the connection string/db name a reference to MongoContext just dosen't cut it
     MongoDbSettings = new MongoDbSettings
     {
-        ConnectionString = "mongodb+srv://keanufarro8:123@clustermvcat2.p0spc.mongodb.net/",
+        ConnectionString = "mongodb+srv://dbuser:123@cluster0.k7wz9.mongodb.net/",
         DatabaseName = "ProductsDB"
     },
     IdentityOptionsAction = options =>
